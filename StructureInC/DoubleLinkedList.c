@@ -84,6 +84,7 @@ void displayList(List* lp)
 	// TODO		
 	Node* curp;
 	if (lp == NULL) return;
+	curp = lp->head->next;
 	while (curp != lp->tail)
 	{
 		printf("Data= %d\n", curp->data);
@@ -118,8 +119,18 @@ Returns			: 성공 - TRUE / 실패 - FALSE
 BOOL removeNode(List* lp, int data)
 {
 	// TODO
-
-	return 0; // 리턴값을 적절히 수정하세요.
+	Node* delNode;
+	if (lp == NULL) return FALSE;
+	delNode = searchNode(lp, data);
+	if (delNode != NULL)
+	{
+		delNode->prev->next = delNode->next;
+		delNode->next->prev = delNode->prev;
+		free(delNode);
+		--lp->size;
+		return TRUE;
+	}
+	else return FALSE; 
 }
 /*----------------------------------------------------------------------------------
 Function name	: sortList - 노드 정렬(오름차순)
@@ -129,8 +140,27 @@ Returns			: 없음
 void sortList(List* lp)
 {
 	// TODO
-
-	return;
+	Node* curp;
+	Node* nextp;
+	int temp = 0;
+	if (lp == NULL) return;
+	curp = lp->head->next;
+	while (curp->next != lp->tail)
+	{
+		nextp = curp->next;
+		while(nextp != lp->tail)
+		{
+			if (curp->data > nextp->data)
+			{
+				temp = curp->data;
+				curp->data = nextp->data;
+				nextp->data = temp;
+			}
+			nextp = nextp->next;
+		}
+		curp = curp->next;
+	}
+	
 }
 /*----------------------------------------------------------------------------------
 Function name	: destroyList - 리스트 내의 모든 노드(head, tail 노드 포함)를 삭제
@@ -140,6 +170,20 @@ Returns			: 없음
 void destroyList(List* lp)
 {
 	// TODO
+	Node* curp;
+	Node* nextp;
+	if (lp == NULL) return;
+	curp = lp->head->next;
+	while (curp != lp->tail)
+	{
+		nextp = curp->next;
+		free(curp);
+		curp = nextp;
+	}
+	free(lp->head);
+	free(lp->tail);
 
+	lp->head = lp->tail = NULL;
+	lp->tail = 0;
 	return;
 }
