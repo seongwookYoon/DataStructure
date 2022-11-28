@@ -1,0 +1,7 @@
+*.sln
+x64/
+.vs/
+StructureinC/x64/
+*.vcxproj
+*.filters
+*.user
